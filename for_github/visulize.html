@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>USDZ Viewer</title>
+    <style>
+        body { font-family: Arial; text-align: center; margin-top: 50px; }
+        a { 
+            display: inline-block; 
+            padding: 15px 25px; 
+            background: #007AFF; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 10px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+<script>
+const usdzFiles = [
+    "co_1.usdz",
+    "co_2.usdz"
+];
+let current = 0;
+
+function updateLink() {
+    const link = document.getElementById('ar-link');
+    link.href = usdzFiles[current];
+    link.textContent = `View ${current + 1}/${usdzFiles.length} in AR`;
+}
+
+document.body.onclick = (e) => {
+    if (e.target.id !== 'ar-link') {
+        current = (current + 1) % usdzFiles.length;
+        updateLink();
+    }
+};
+
+updateLink(); // Initialize
+</script>
+
+<h2>USDZ Model Viewer</h2>
+<p>Click anywhere to cycle models</p>
+<a id="ar-link" href="model1.usdz" rel="ar"></a>
+</body>
+</html>
