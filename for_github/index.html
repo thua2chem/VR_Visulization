@@ -1,46 +1,63 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>USDZ Viewer</title>
+    <title>USDZ Desktop Viewer</title>
+    <script src="https://cdn.jsdelivr.net/npm/@google/model-viewer@2.1.1/dist/model-viewer.min.js"></script>
     <style>
-        body { font-family: Arial; text-align: center; margin-top: 50px; }
-        a { 
-            display: inline-block; 
-            padding: 15px 25px; 
-            background: #007AFF; 
-            color: white; 
-            text-decoration: none; 
-            border-radius: 10px;
-            font-size: 18px;
+        model-viewer {
+            width: 100%;
+            height: 80vh;
+            margin: 0 auto;
         }
+        .controls { text-align: center; margin: 20px; }
+        button { padding: 10px 20px; font-size: 16px; }
     </style>
 </head>
 <body>
-<script>
-const usdzFiles = [
-    "co_1.usdz",
-    "co_2.usdz"
-];
-let current = 0;
+    <h1>USDZ Desktop Viewer</h1>
+    
+    <!-- Model container -->
+    <model-viewer
+        id="viewer"
+        alt="3D Model"
+        ar
+        auto-rotate
+        camera-controls>
+    </model-viewer>
+    
+    <!-- Controls -->
+    <div class="controls">
+        <button onclick="prevModel()">Previous</button>
+        <button onclick="nextModel()">Next</button>
+        <p id="model-info">Model 1/2</p>
+    </div>
 
-function updateLink() {
-    const link = document.getElementById('ar-link');
-    link.href = usdzFiles[current];
-    link.textContent = `View ${current + 1}/${usdzFiles.length} in AR`;
-}
+    <script>
+        const models = [
+            "co_1.usdz",
+            "co_2.usdz"
+        ];
+        let currentModel = 0;
+        const viewer = document.getElementById("viewer");
+        const modelInfo = document.getElementById("model-info");
 
-document.body.onclick = (e) => {
-    if (e.target.id !== 'ar-link') {
-        current = (current + 1) % usdzFiles.length;
-        updateLink();
-    }
-};
+        function loadModel() {
+            viewer.src = models[currentModel];
+            modelInfo.textContent = `Model ${currentModel + 1}/${models.length}`;
+        }
 
-updateLink(); // Initialize
-</script>
+        function nextModel() {
+            currentModel = (currentModel + 1) % models.length;
+            loadModel();
+        }
 
-<h2>USDZ Model Viewer</h2>
-<p>Click anywhere to cycle models</p>
-<a id="ar-link" href="model1.usdz" rel="ar"></a>
+        function prevModel() {
+            currentModel = (currentModel - 1 + models.length) % models.length;
+            loadModel();
+        }
+
+        // Initialize
+        loadModel();
+    </script>
 </body>
 </html>
